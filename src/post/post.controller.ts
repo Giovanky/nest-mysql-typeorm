@@ -9,31 +9,34 @@ import {
   Put,
 } from '@nestjs/common';
 import { CreatePostDto, EditPostDto } from './dto';
+import { PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
+  constructor(private readonly postService: PostService) {}
+
   @Get()
   getMany() {
-    return 'holi post';
+    return this.postService.getMany();
   }
 
   @Get(':id')
   getOne(@Param('id', ParseIntPipe) id: number) {
-    return {
-      message: `getOne: ${id} : ${typeof id}`,
-    };
+    return this.postService.getOne(id);
   }
 
   @Post()
   createOne(@Body() dto: CreatePostDto) {
-    return dto;
+    return this.postService.createOne();
   }
 
   @Put(':id')
-  editOne(@Param('id') id: string, @Body() dto: EditPostDto) {
-    return dto;
+  editOne(@Param('id') id: number, @Body() dto: EditPostDto) {
+    return this.postService.editOne(id);
   }
 
-  // @Delete()
-  // deleteOne() {}
+  @Delete(':id')
+  deleteOne(@Param('id') id: number) {
+    return this.postService.deleteOne(id);
+  }
 }
